@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Gambling room</title>
+        <link rel="stylesheet" href="style/home.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1 id="title-gamble">> |</h1>
+        <div id="main">
+            <div id="players-p">
+                <div id="players"></div>
+            </div>
+            <div id="gamesettings">
+                <div class="spacer"></div>
+                <p>Game length</p>
+                <input type="range" value="1" min="1" max="10" step="1" id="length" class="slider_css">
+                <p id="len-lab" class="small">1 round</p>   
+                <p>Dice throws per round</p>
+                <input type="range" value="1" min="1" max="10" step="1" id="throws" class="slider_css">
+                <p id="throw-lab" class="small">1 throw</p>
+                <p>Player count:</p>
+                <input type="range" value="2" min="2" max="25" step="1" id="p_count" class="slider_css">
+                <p class="small" id="p_c">2 players</p>
+                <button id="play-b">Play</button>
+            </div>
+        </div>
+        <script src="js/home.js"></script>
+    </body>
+</html>
