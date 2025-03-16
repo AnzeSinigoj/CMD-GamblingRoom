@@ -128,22 +128,12 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
                     warnPlayerName(i);
                 }
             }
+            updateColor(i);
         });
 
-        color_c.addEventListener('input', function () { //Pogledamo ce barva ni crna in dodamo novo
-            if (color_c.value != '#000000') {
-                color_e.style.display = 'none';
-                play_disabled_color = false;
-                updatePlay();
-                name_h1.style.color = color_c.value;
-                player_colors.push(color_c.value);
-            } else {
-                color_e.style.display = 'block';
-                play_disabled_color = true;
-                updatePlay();
-                color_e.textContent = 'Cannot use black as user color!';
-            }
-        });
+        color_c.addEventListener('input', function(){ //Pogledamo ce barva ni crna in dodamo novo
+            updateColor(i)
+        }); 
     }
 }
 
@@ -156,6 +146,25 @@ function nameValidation(new_name) {
     return true;
 }
 
+function updateColor(id) {
+    let color_c = document.getElementById('color' + id);
+    let color_e = document.getElementById('color-err' + id);
+    let name_h1 = document.getElementById('name' + id);
+
+    if (color_c.value != '#000000') {
+        color_e.style.display = 'none';
+        play_disabled_color = false;
+        updatePlay();
+        name_h1.style.color = color_c.value;
+        player_colors.push(color_c.value);
+
+    } else {
+        color_e.style.display = 'block';
+        play_disabled_color = true;
+        updatePlay();
+        color_e.textContent = 'Cannot use black as user color!';
+    }
+}
 
 function updatePlay() { //Pogledamo ce so vsi pogoji za omogocit zacetek igre
     if (play_disabled_name || play_disabled_color) {
