@@ -10,9 +10,12 @@ let players = document.getElementById('players'); //Div za igralce -parent
 let play_b = document.getElementById('play-b'); //Gumb za igrat
 let play_disabled_name = false; //true: ce je aktivna napaka pri kakem imenu 
 let play_disabled_color = false;//true: ce je aktrivna napaka pri kaki barvi
+//User data -> vsak igralec ima svoj id kateri je enak indeksu tabele 
 let player_names = []; //Imena igralcev
-let player_colors = [];
+let player_colors = []; //Barve za vsakega igralca
 let player_gamemodes = []; //True -> automatic, False -> manual
+let game_len = 1;
+let round_len = 1;
 
 let players_c = 2; //Stevilo igralcev
 
@@ -57,6 +60,7 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
 
 len_sl.addEventListener('input', function () { //Updater za label od st rund
     let n = parseInt(len_sl.value);
+    game_len = n;
     if (n == 1) {
         len_lab.textContent = n + ' round';
     } else {
@@ -66,6 +70,7 @@ len_sl.addEventListener('input', function () { //Updater za label od st rund
 
 th_sl.addEventListener('input', function () { //Updater za label od st metov na rundo
     let n = parseInt(th_sl.value);
+    round_len = n;
     if (n == 1) {
         th_lab.textContent = n + ' throw';
     } else {
@@ -174,7 +179,7 @@ function updateColor(id) { //Funkcja za posodabljat in izbirat barvo
     let color_s = color_c.value;
     let brightness = getBrightness(color_s);
 
-    if (brightness > 40) {
+    if (brightness > 20) {
         play_disabled_color = false;
         color_e.style.display = 'none';
         if (!play_disabled_name) {
@@ -183,7 +188,7 @@ function updateColor(id) { //Funkcja za posodabljat in izbirat barvo
         }
 
         name_h1.style.color = color_s;
-        player_colors.push(color_s);
+        player_colors[id] = (color_s);
         updatePlay();
     } else {
         play_disabled_color = true;
@@ -240,6 +245,18 @@ async function napisi() { //Printamo naslov kot da nekdo tipka
 
     isRunning = false;
 }
+
+play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
+    //Dodajanje v sessionStorage
+    sessionStorage.setItem("users", JSON.stringify(player_names)); //Player count ni treba podat ker users.len = p_count
+    sessionStorage.setItem("colors", JSON.stringify(player_colors));
+    sessionStorage.setItem("gamemodes", JSON.stringify(player_gamemodes));
+    sessionStorage.setItem("game_len", game_len);
+    sessionStorage.setItem("round_len", round_len);
+
+    //Odpremo game page z moznostjo iti nazaj
+    window.location.href = "html/game.html";
+});
 
 window.onload = function () { //Ko se stran zlouda napisemo enkrat tekst nato pa usake 3.5 sekunde
     napisi();
