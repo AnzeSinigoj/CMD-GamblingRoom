@@ -131,6 +131,11 @@ h1 {
     color: #00FF00;
 }
 
+.errH1 {
+    color: red !important;
+    font-weight: bold;
+}
+
 .slider_css {
     width: 40%;
     -webkit-appearance: none;
@@ -243,4 +248,9 @@ button:disabled {
     height: 1.5vw;
     border-radius: 3vw;
     border: none; 
+}
+
+.pErr {
+    border: 0.3vw dotted red !important;
+    border-radius: 3vw;
 }

@@ -15,17 +15,6 @@ let player_colors = [];
 
 let players_c = 2; //Stevilo igralcev
 
-function warnPlayerName(index) { //Metoda ki opozori igralca 
-    let name_h1 = document.getElementById('name' + index); 
-    let name_e = document.getElementById('name-err' + index);
-    name_h1.textContent = 'NULL';
-    name_h1.style.color = 'red';
-    name_e.textContent = 'Cannot use the same name as another user!';
-    name_e.style.display = 'block';
-    play_disabled_name = true;
-    updatePlay();
-}
-
 function genPlayers(n) { //Metoda ki generira forme za igralce
     let userDiv = '';
     players_c = n;
@@ -35,7 +24,7 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
     updatePlay();
 
     for (let i = 0; i < n; i++) { //Dodamo vsakega igralca posebej v div in mu damo svoj lasten id, vsak id igralca je enak njegovemu indeksu v setu
-        const name = `Player ${i+1}`;
+        const name = `Player ${i + 1}`;
         const id = i;
         player_names.push(name);
         player_colors.push('#00FF00');
@@ -93,55 +82,63 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
         let name_input = document.getElementById('pName' + i);
         let name_e = document.getElementById('name-err' + i);
         let color_c = document.getElementById('color' + i);
-        let color_e = document.getElementById('color-err' + i);
+        let parent_box = name_h1.parentElement;
 
         name_input.addEventListener('input', function () { //Preverimo ce je ime krajse od 10 in ce ni prazno  in potem spremenimo
-            if (name_input.value.length > 10) { //Ce je ime vecje od 10 obvestimo usr
-                name_e.style.display = 'block';
-                play_disabled_name = true
-                updatePlay();
-                name_e.textContent = 'Max username length reached!';
+            if (name_input.value.length > 10) { //Ce je ime vecje od ne dovolimo vec vnosa
                 name_input.value = name_input.value.slice(0, 10);
-                name_h1.style.color = 'red';
             } else if (name_input.value.length == 0) { //Ce ni imena obvestimo usr
-                name_h1.textContent = `NULL`;
-                name_h1.style.color = 'red';
+                play_disabled_name = true;
+                name_h1.textContent = `ERROR`;
+                name_h1.classList.add('errH1');
+                parent_box.classList.add('pErr');
+
                 name_e.style.display = 'block';
-                play_disabled_name = true
                 name_e.textContent = 'Username cannot be empty!';
                 updatePlay();
             }
             else {
-                name_e.style.display = 'none';
                 play_disabled_name = false;
-                updatePlay();
+                name_h1.classList.remove('errH1');
+                parent_box.classList.remove('pErr');
+
+                name_e.style.display = 'none';
                 name_e.textContent = '';
-                name_h1.style.color = '#00FF00';
+                updatePlay();
             }
+
             if (name_input.value.length > 0) {
-                if (nameValidation(name_input.value)) {
+                if (nameValidation(name_input.value, i)) {
                     player_names[i] = name_input.value;
                     name_h1.textContent = name_input.value;
-                } else{
-                    player_names[i] = `Player ${i}`;
-                    name_h1.textContent = `Player ${i}`;
-                    warnPlayerName(i);
+                } else {
+                    play_disabled_name = true;
+                    name_h1.textContent = `ERROR`;
+                    name_h1.classList.add('errH1');
+                    parent_box.classList.add('pErr');
+
+                    name_e.textContent = 'Cannot use the same name as another user!';
+                    name_e.style.display = 'block';
+                    updatePlay();
                 }
             }
             updateColor(i);
         });
 
-        color_c.addEventListener('input', function(){ //Pogledamo ce barva ni crna in dodamo novo
+        color_c.addEventListener('input', function () { //Pogledamo ce barva ni crna in dodamo novo
             updateColor(i)
-        }); 
+        });
     }
 }
 
-function nameValidation(new_name) { 
+function nameValidation(new_name, id) { //preveri ce novo ime za userja je conflicting
     for (let i = 0; i < player_names.length; i++) {
-       if (player_names[i] == new_name) {
+        if(i == id){ //ce je id isti kot indeks preskocino da ne primerjamo enakega userja 
+            continue;
+        }
+        else if (player_names[i].toLowerCase() == new_name.toLowerCase()) {
             return false;
-       }
+        }
     }
     return true;
 }
@@ -150,19 +147,28 @@ function updateColor(id) {
     let color_c = document.getElementById('color' + id);
     let color_e = document.getElementById('color-err' + id);
     let name_h1 = document.getElementById('name' + id);
+    let parent_box = name_h1.parentElement;
 
     if (color_c.value != '#000000') {
-        color_e.style.display = 'none';
         play_disabled_color = false;
-        updatePlay();
+        color_e.style.display = 'none';
+        if (!play_disabled_name) {
+            name_h1.classList.remove('errH1');
+            parent_box.classList.remove('pErr');
+        }
+
         name_h1.style.color = color_c.value;
         player_colors.push(color_c.value);
+        updatePlay();
 
     } else {
-        color_e.style.display = 'block';
         play_disabled_color = true;
-        updatePlay();
         color_e.textContent = 'Cannot use black as user color!';
+        color_e.style.display = 'block';
+        name_h1.classList.add('errH1');
+        parent_box.classList.add('pErr');
+
+        updatePlay();
     }
 }
 
@@ -202,7 +208,7 @@ async function napisi() { //Printamo naslov kot da nekdo tipka
     isRunning = false;
 }
 
-window.onload = function() { //Ko se stran zlouda napisemo enkrat tekst nato pa usake 3.5 sekunde
+window.onload = function () { //Ko se stran zlouda napisemo enkrat tekst nato pa usake 3.5 sekunde
     napisi();
     setInterval(napisi, 3500);
 };
