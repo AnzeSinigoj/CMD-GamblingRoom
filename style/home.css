@@ -365,7 +365,8 @@ button:disabled {
     }
 
     .pErr{
-        border: 0.5vw dotted red;
+        padding: 15% 5%;
+        border: 0.5vw dotted red !important;
     }
 
     #btn-holder{
