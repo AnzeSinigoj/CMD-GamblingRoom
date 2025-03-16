@@ -43,8 +43,10 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
             <input type="color" id="color${id}" value="#00FF00">
             <p class="err" id="color-err${id}"></p>
             <p>Select game mode:</p>
-            <button id="a_${id}">Auto</button>
-            <button id="m_${id}">Manual</button>
+            <div id="btn-holder"> 
+                <button id="a_${id}">Auto</button>
+                <button id="m_${id}">Manual</button>
+            </div>
         </div>
         `;
 
@@ -136,13 +138,13 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
             updateColor(i)
         });
 
-        manual.addEventListener('click', function(){
+        manual.addEventListener('click', function () {
             player_gamemodes[i] = false;
             manual.disabled = true;
             auto.disabled = false;
         });
 
-        auto.addEventListener('click', function(){
+        auto.addEventListener('click', function () {
             player_gamemodes[i] = true;
             manual.disabled = false;
             auto.disabled = true;
@@ -153,7 +155,7 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
 
 function nameValidation(new_name, id) { //preveri ce novo ime za userja je conflicting
     for (let i = 0; i < player_names.length; i++) {
-        if(i == id){ //ce je id isti kot indeks preskocino da ne primerjamo enakega userja 
+        if (i == id) { //ce je id isti kot indeks preskocino da ne primerjamo enakega userja 
             continue;
         }
         else if (player_names[i].toLowerCase() == new_name.toLowerCase()) {
@@ -163,13 +165,16 @@ function nameValidation(new_name, id) { //preveri ce novo ime za userja je confl
     return true;
 }
 
-function updateColor(id) {
+function updateColor(id) { //Funkcja za posodabljat in izbirat barvo
     let color_c = document.getElementById('color' + id);
     let color_e = document.getElementById('color-err' + id);
     let name_h1 = document.getElementById('name' + id);
     let parent_box = name_h1.parentElement;
 
-    if (color_c.value != '#000000') {
+    let color_s = color_c.value;
+    let brightness = getBrightness(color_s);
+
+    if (brightness > 40) {
         play_disabled_color = false;
         color_e.style.display = 'none';
         if (!play_disabled_name) {
@@ -177,13 +182,12 @@ function updateColor(id) {
             parent_box.classList.remove('pErr');
         }
 
-        name_h1.style.color = color_c.value;
-        player_colors.push(color_c.value);
+        name_h1.style.color = color_s;
+        player_colors.push(color_s);
         updatePlay();
-
     } else {
         play_disabled_color = true;
-        color_e.textContent = 'Cannot use black as user color!';
+        color_e.textContent = 'Color is too dark! Please pick a brighter one.';
         color_e.style.display = 'block';
         name_h1.classList.add('errH1');
         parent_box.classList.add('pErr');
@@ -191,6 +195,15 @@ function updateColor(id) {
         updatePlay();
     }
 }
+
+
+function getBrightness(hex) { //Funkcja ki izracuna koliko je barva svetla
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+    return (0.299 * r) + (0.587 * g) + (0.114 * b);
+}
+
 
 function updatePlay() { //Pogledamo ce so vsi pogoji za omogocit zacetek igre
     if (play_disabled_name || play_disabled_color) {

@@ -69,7 +69,7 @@ body {
 }
 
 #players::-webkit-scrollbar {
-    height: 1vw; 
+    height: 1vw;
     background: #1e1e1e;
     border-radius: 1vw;
 }
@@ -102,6 +102,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
     gap: 0.5vw;
 }
 
@@ -178,7 +179,6 @@ button {
     border-radius: 3vw;
     font-size: 1vw;
     font-weight: bold;
-    margin-top: 5%;
 }
 
 button:hover {
@@ -207,11 +207,11 @@ button:disabled {
     gap: 1vw;
 }
 
-.addP > button {
+.addP>button {
     margin: 0;
 }
 
-.addP > input[type=text] {
+.addP>input[type=text] {
     width: 70%;
     height: 1.5vw;
     background: black;
@@ -223,10 +223,10 @@ button:disabled {
     outline: none;
     text-align: center;
     font-size: 1vw;
-   
+
 }
 
-.addP > input[type=color] {
+.addP>input[type=color] {
     height: 2vw;
     width: 50%;
     background-color: black;
@@ -234,23 +234,175 @@ button:disabled {
     padding: 0.1vw 0.3vw;
     border-radius: 3vw;
     cursor: pointer;
-    appearance: none; /* Removes default browser styling */
+    appearance: none;
 }
 
 
-.addP > input[type=color]::-webkit-color-swatch {
+.addP>input[type=color]::-webkit-color-swatch {
     border-radius: 3vw;
-    border: none; 
+    border: none;
 }
 
-.addP > input[type=color]::-webkit-color-swatch,
-.addP > input[type=color]::-moz-color-swatch {
+.addP>input[type=color]::-webkit-color-swatch,
+.addP>input[type=color]::-moz-color-swatch {
     height: 1.5vw;
     border-radius: 3vw;
-    border: none; 
+    border: none;
 }
 
 .pErr {
     border: 0.3vw dotted red !important;
     border-radius: 3vw;
+}
+
+#btn-holder{
+    width: 100%;
+    display: flex;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5vw;
+}
+
+
+@media screen and (max-aspect-ratio: 3/4) {
+    *{
+        border-radius: 3vh;
+    }
+
+    #title-gamble {
+        font-size: 4vh;
+    }
+
+    p {
+        font-size: 1.7vh;
+    }
+
+    .err {
+        font-size: 1vh;
+    }
+
+    button {
+        font-size: 1.5vh;
+        height: 3vh;
+        width: 15vh;
+    }
+
+    .small {
+        font-size: 1vh;
+    }
+
+    h1 {
+        font-size: 2.5vh;
+    }
+
+    .errH1 {
+        font-size: 2.5vh;
+    }
+
+    .slider_css {
+        width: 80%;
+        border: 0.5vw dotted #00FF00;
+    }
+
+    .slider_css::-webkit-slider-thumb {
+        width: 2vh;
+        height: 2vh;
+    }
+
+    .slider_css::-moz-range-thumb,
+    .slider_css::-ms-thumb {
+        width: 2vh;
+        height: 2vh;
+    }
+
+    #gamesettings {
+        justify-content: start;
+        width: 40%;
+        height: 90%;
+        gap: 1vh;
+    }
+
+    #players-p {
+        width: 50%;
+        height: 90%;
+    }
+
+    #players {
+        height: 100%;
+        max-height: 93%;
+        width: 95%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        text-align: center;
+        gap: 1vh;
+        overflow: auto;
+    }
+
+    .addP {
+        min-width: 80%;
+        max-width: 80%;
+        min-height: 30%;
+        gap: 0.5vh;
+        border: 0.5vw dotted #00FF00;
+    }
+
+    .addP>input[type=text] {
+        width: 80%;
+        height: 2vh;
+        font-size: 1.5vh;
+    }
+
+    .addP>input[type=color] {
+        height: 2vh;
+    }
+
+    .addP > button {
+        width: 10vh;
+    }
+
+    .pErr{
+        border: 0.5vw dotted red;
+    }
+
+    #btn-holder{
+        height: fit-content;
+        display: flex;
+        margin-bottom: 0.5vh;
+        width: 97%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    *{
+        border-radius: 3vh;
+    }
+
+    #main {
+        gap: 0.5vw;
+    }
+
+    .err {
+        font-size: 1vh;
+    }
+
+    #players-p {
+        width: 60%;
+    }
+
+    #players {
+        scrollbar-width: thin;
+    }
+
+    .addP {
+        border: 1vw dotted #00FF00;
+    }
+
+    .pErr{
+        padding: 15% 5%;
+        border: 1vw dotted red !important; 
+    }
 }
