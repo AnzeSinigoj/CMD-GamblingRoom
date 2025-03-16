@@ -10,27 +10,17 @@ let players = document.getElementById('players'); //Div za igralce -parent
 let play_b = document.getElementById('play-b'); //Gumb za igrat
 let play_disabled_name = false; //true: ce je aktivna napaka pri kakem imenu 
 let play_disabled_color = false;//true: ce je aktrivna napaka pri kaki barvi
-let player_names = new Set(); //Imena igralcev
+let player_names = []; //Imena igralcev
 let player_colors = [];
 
 let players_c = 2; //Stevilo igralcev
 
-function addPlayer(oldname, name, index) { //Metoda ki doda igralca brez dodajanja duplikatov
-    player_names.delete(oldname); 
-    if (player_names.has(name)) { 
-        warnPlayer(index);
-    }else{
-        player_names.add(name);
-    }
-}
-
-function warnPlayer(index) { //Metoda ki opozori igralca ce je nastavil duplikatno ime
-    console.log(player_names);
-    console.log(index);
+function warnPlayerName(index) { //Metoda ki opozori igralca 
     let name_h1 = document.getElementById('name' + index); 
     let name_e = document.getElementById('name-err' + index);
     name_h1.textContent = 'NULL';
-    name_e.textContent = 'Cannot use the same name!';
+    name_h1.style.color = 'red';
+    name_e.textContent = 'Cannot use the same name as another user!';
     name_e.style.display = 'block';
     play_disabled_name = true;
     updatePlay();
@@ -41,13 +31,13 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
     players_c = n;
     play_disabled_name = false;
     play_disabled_color = false;
-    player_names.clear();
+    player_names = [];
     updatePlay();
 
-    for (let i = 1; i <= n; i++) { //Dodamo vsakega igralca posebej v div in mu damo svoj lasten id, vsak id igralca je enak njegovemu indeksu v setu
-        const name = `Player ${i}`;
+    for (let i = 0; i < n; i++) { //Dodamo vsakega igralca posebej v div in mu damo svoj lasten id, vsak id igralca je enak njegovemu indeksu v setu
+        const name = `Player ${i+1}`;
         const id = i;
-        addPlayer(name, name, i); //Set je prazen lahko damo oba parametra enako ker itak .del nebo nic zbrisu ce ne najde
+        player_names.push(name);
         player_colors.push('#00FF00');
 
         const p_div = `
@@ -89,7 +79,7 @@ th_sl.addEventListener('input', function () { //Updater za label od st metov na 
 });
 
 p_count.addEventListener('input', function () { //Updater za label od st igralcov
-    player_names.clear();
+    player_names = [];
     let n = parseInt(p_count.value);
     p_lab.textContent = n + ' players';
     players.innerHTML = genPlayers(n);
@@ -98,7 +88,7 @@ p_count.addEventListener('input', function () { //Updater za label od st igralco
 
 
 function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede na svoj id
-    for (let i = 1; i <= n; i++) {
+    for (let i = 0; i < n; i++) {
         let name_h1 = document.getElementById('name' + i);
         let name_input = document.getElementById('pName' + i);
         let name_e = document.getElementById('name-err' + i);
@@ -118,8 +108,8 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
                 name_h1.style.color = 'red';
                 name_e.style.display = 'block';
                 play_disabled_name = true
-                updatePlay();
                 name_e.textContent = 'Username cannot be empty!';
+                updatePlay();
             }
             else {
                 name_e.style.display = 'none';
@@ -129,9 +119,14 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
                 name_h1.style.color = '#00FF00';
             }
             if (name_input.value.length > 0) {
-                addPlayer(name_h1.textContent, name_input.value, i); //Damo likvidirat prejsnje ime
-                name_h1.textContent = name_input.value;
-                
+                if (nameValidation(name_input.value)) {
+                    player_names[i] = name_input.value;
+                    name_h1.textContent = name_input.value;
+                } else{
+                    player_names[i] = `Player ${i}`;
+                    name_h1.textContent = `Player ${i}`;
+                    warnPlayerName(i);
+                }
             }
         });
 
@@ -151,6 +146,16 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
         });
     }
 }
+
+function nameValidation(new_name) { 
+    for (let i = 0; i < player_names.length; i++) {
+       if (player_names[i] == new_name) {
+            return false;
+       }
+    }
+    return true;
+}
+
 
 function updatePlay() { //Pogledamo ce so vsi pogoji za omogocit zacetek igre
     if (play_disabled_name || play_disabled_color) {
