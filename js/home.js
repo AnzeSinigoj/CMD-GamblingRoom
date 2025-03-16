@@ -12,6 +12,7 @@ let play_disabled_name = false; //true: ce je aktivna napaka pri kakem imenu
 let play_disabled_color = false;//true: ce je aktrivna napaka pri kaki barvi
 let player_names = []; //Imena igralcev
 let player_colors = [];
+let player_gamemodes = []; //True -> automatic, False -> manual
 
 let players_c = 2; //Stevilo igralcev
 
@@ -21,6 +22,8 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
     play_disabled_name = false;
     play_disabled_color = false;
     player_names = [];
+    player_colors = [];
+    player_gamemodes = [];
     updatePlay();
 
     for (let i = 0; i < n; i++) { //Dodamo vsakega igralca posebej v div in mu damo svoj lasten id, vsak id igralca je enak njegovemu indeksu v setu
@@ -28,6 +31,7 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
         const id = i;
         player_names.push(name);
         player_colors.push('#00FF00');
+        player_gamemodes.push(true);  //Default gamemode je automatic
 
         const p_div = `
         <div class="addP">
@@ -68,7 +72,6 @@ th_sl.addEventListener('input', function () { //Updater za label od st metov na 
 });
 
 p_count.addEventListener('input', function () { //Updater za label od st igralcov
-    player_names = [];
     let n = parseInt(p_count.value);
     p_lab.textContent = n + ' players';
     players.innerHTML = genPlayers(n);
@@ -82,7 +85,11 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
         let name_input = document.getElementById('pName' + i);
         let name_e = document.getElementById('name-err' + i);
         let color_c = document.getElementById('color' + i);
+        let manual = document.getElementById('m_' + i);
+        let auto = document.getElementById('a_' + i);
         let parent_box = name_h1.parentElement;
+
+        auto.disabled = true; //Ker je auto default in je ze zapisano v arr ze takoj selektamo
 
         name_input.addEventListener('input', function () { //Preverimo ce je ime krajse od 10 in ce ni prazno  in potem spremenimo
             if (name_input.value.length > 10) { //Ce je ime vecje od ne dovolimo vec vnosa
@@ -128,6 +135,19 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
         color_c.addEventListener('input', function () { //Pogledamo ce barva ni crna in dodamo novo
             updateColor(i)
         });
+
+        manual.addEventListener('click', function(){
+            player_gamemodes[i] = false;
+            manual.disabled = true;
+            auto.disabled = false;
+        });
+
+        auto.addEventListener('click', function(){
+            player_gamemodes[i] = true;
+            manual.disabled = false;
+            auto.disabled = true;
+        });
+
     }
 }
 
