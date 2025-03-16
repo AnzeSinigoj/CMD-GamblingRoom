@@ -1,4 +1,4 @@
-# GamblingRoom
+# CMD-GamblingRoom
 
 <mark>**WORK IN PROGRESS!**</mark>
 
