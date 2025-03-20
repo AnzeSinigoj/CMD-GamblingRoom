@@ -125,6 +125,7 @@ async function rollDice(id) {
 async function notifyAndUpdate(score){
     dice.style.fontSize = '3.5vw';
     dice.textContent= `Score incremented by ${score}`;
+    updateScoreboard();
     await sleep(1500);
     dice.style.fontSize = '4vw';
 }
@@ -171,6 +172,12 @@ function waitForEvent(element) {
     });
 }
 
+function updateScoreboard() {
+    for (let i = 0; i < users.length; i++) {
+        let score_lab = document.getElementById('score'+i);
+        score_lab.textContent = score[i];
+    }
+}
 
 async function loadData(){
     player_div.innerHTML = '';
