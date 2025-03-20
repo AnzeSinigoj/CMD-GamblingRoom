@@ -97,7 +97,7 @@ async function blinkBar() { //blink za cursor
     }
 }
 
-async function rollDice(id) {
+async function rollDice(id) { //Zavrti kocko in updejta score
     dice.style.fontSize = '4vw';
     let diceNum;
     let delay = 10;
@@ -110,7 +110,9 @@ async function rollDice(id) {
         
         delay += 10; 
     }
-    score_lab.textContent = (score[id] + diceNum + 1); //update score
+    score[id] = diceNum + 1;
+    score_lab.textContent = (score[id]); //update score
+    updateScoreboard();
 
     //blink 3 krat po izboru
     for (let i = 0; i <3; i++) {
@@ -119,18 +121,15 @@ async function rollDice(id) {
         dice.style.color = '#00FF00';
         await sleep(150);
     }
-
-    return diceNum; 
 }
 
-async function notifyAndUpdate(score){
+async function notifyAndUpdate(score){ //Pokazemo userju da za koliko se je zvisal score
     dice.style.fontSize = '3.5vw';
     dice.textContent= `Score incremented by ${score}`;
-    updateScoreboard();
     await sleep(1500);
 }
 
-async function countdown(s) {
+async function countdown(s) { //Preprost odstevalnik
     dice.style.fontSize = '4vw';
     for (let i = s; i > 0; i--) {
         dice.textContent = i;
@@ -138,33 +137,37 @@ async function countdown(s) {
     }
 }
 
-async function play() {
-    for (let i = 0; i < users.length; i++) {
-        dice.textContent = '';
-        user_lab.textContent = users[i];
-        user_lab.style.setProperty('color', colors[i], 'important');
+async function play() { //odigra eno rundo 
+        for (let i = 0; i < users.length; i++) {
+            for (let r = 1; r <= round_len; r++) {
+                round_len_lab.textContent = `Throw: ${r}/${round_len}`; //updejatmo counter
+         
+                dice.textContent = '';
+                user_lab.textContent = users[i];
+                user_lab.style.setProperty('color', colors[i], 'important');
 
-        score_lab.textContent = score[i];
-        score_lab.style.setProperty('color', colors[i], 'important');
+                score_lab.textContent = score[i];
+                score_lab.style.setProperty('color', colors[i], 'important');
 
-        throw_btn.disabled = gamemodes[i];
+                throw_btn.disabled = gamemodes[i];
 
-        if (gamemodes[i]) {
-            await countdown(3); 
-            score[i] += await rollDice(i)+1; 
-            await sleep(3000);
-            await notifyAndUpdate(score[i]); 
-        } else {
-            await waitForEvent(throw_btn); 
-            throw_btn.disabled = true;
-            score[i] += await rollDice(i)+1;
-            await sleep(3000);
-            await notifyAndUpdate(score[i]);
+                if (gamemodes[i]) {
+                    await countdown(3); 
+                    await rollDice(i); 
+                    await sleep(3000);
+                    await notifyAndUpdate(score[i]); 
+                } else {
+                    await waitForEvent(throw_btn); 
+                    throw_btn.disabled = true;
+                    await rollDice(i);
+                    await sleep(3000);
+                    await notifyAndUpdate(score[i]);
+                }
         }
     }
 }
 
-function waitForEvent(element) {
+function waitForEvent(element) { //Funkcja ki pocaka do konca necesa
     return new Promise((resolve) => {
         element.addEventListener("click", function handler(event) {
             element.removeEventListener("click", handler);
@@ -173,17 +176,17 @@ function waitForEvent(element) {
     });
 }
 
-function updateScoreboard() {
+function updateScoreboard() { //Posodibimo scoreboard !POTREBNO BO SORTIRAT IN SPREMINJAT INDEKSE VSEM TABELAM!
     for (let i = 0; i < users.length; i++) {
         let score_lab = document.getElementById('score'+i);
         score_lab.textContent = score[i];
     }
 }
 
-async function loadData(){
+async function loadData() { //Podatke pobrane iz session storage damo v dive in to
     player_div.innerHTML = '';
     game_len_lab.textContent = 'Game length: ' + round_c;
-    round_len_lab.textContent = 'Round length: '+ round_len;
+    round_len_lab.textContent = 'Throws per round: '+ round_len;
 
     for (let i = 0; i < users.length; i++) {
         let cMode = gamemodes[i]?"A":"M";
@@ -255,17 +258,21 @@ function genFakeTestData() { //SAMO ZA TESTIRANJE NAREDI FAKE USER DATA ZA TESTI
     console.log("Fake data inserted!");
 }
 
-start_btn.addEventListener('click', function(){
+start_btn.addEventListener('click', async function() {
     start_btn.disabled = true;
-    startGame();
+    await startGame();
 });
 
 async function startGame() { //startamo dejansko igro
-    for (let i = 0; i < round_c; i++) {
+    for (let i = 1; i <= round_c; i++) {
+        game_len_lab.textContent = `Game length: ${i}/${round_c}`;
         await play(); 
     }
-    //TO DO:
-    //Preseli podatke na win page
+    //Shranimo podatke
+    sessionStorage.setItem("users", JSON.stringify(users));
+    sessionStorage.setItem("colors", JSON.stringify(colors));
+    sessionStorage.setItem("score", JSON.stringify(score));
+
     window.location.href = "end.html";
 }
 
