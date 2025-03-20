@@ -132,6 +132,16 @@ h1 {
     color: #00FF00;
 }
 
+#title-bar {
+    font-size: 2vw;
+    font-weight: bold;
+    color: #00FF00;
+}
+
+#title-div{
+    display: flex;
+}
+
 .errH1 {
     color: red !important;
     font-weight: bold;
@@ -293,7 +303,10 @@ button:disabled {
     }
 
     h1 {
-        font-size: 2.5vh;
+        font-size: 2vh;
+    }
+    #title-bar {
+        font-size: 4vh;
     }
 
     .errH1 {

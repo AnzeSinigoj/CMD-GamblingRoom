@@ -4,6 +4,7 @@ let len_lab = document.getElementById('len-lab'); //Label za dolzino
 let th_sl = document.getElementById('throws'); //Slider za kolicino metov na rundo
 let th_lab = document.getElementById('throw-lab'); //Label za kolicino
 let title = document.getElementById('title-gamble'); //Naslov strani 
+let title_bar = document.getElementById('title-bar'); //Title bilik bar
 let p_count = document.getElementById('p_count'); //Slider za stevilo igralcev
 let p_lab = document.getElementById('p_c'); //Label za st igralcev
 let players = document.getElementById('players'); //Div za igralce -parent
@@ -229,21 +230,38 @@ function sleep(ms) { //spi N ms
 }
 
 let isRunning = false;
+let isBlinking = false;
 
-async function napisi() { //Printamo naslov kot da nekdo tipka
+async function napisi() { //funkcja ki simulira rocno tipkanje teksta
     if (isRunning) return;
     isRunning = true;
+    isBlinking = false;
 
-    title.textContent = '> |';
+    title.textContent = '>';
     const text = "Gambling room";
 
-    await sleep(300);
+    blinkBar();
+    await sleep(2000);
     for (let i = 0; i < text.length; i++) {
-        title.textContent = `> ${text.slice(0, i + 1)}|`;
-        await sleep(getRandomInt(100, 200));
+        title.textContent = `> ${text.slice(0, i + 1)}`;
+        await sleep(getRandomInt(100, 250));
     }
 
     isRunning = false;
+    
+    blinkBar();
+}
+
+async function blinkBar() { //blink za cursor
+    if (isBlinking) return;  
+    isBlinking = true;
+
+    while (isBlinking) {
+        title_bar.style.color = 'black';
+        await sleep(700);
+        title_bar.style.color = '#00FF00';
+        await sleep(700);
+    }
 }
 
 play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
@@ -260,7 +278,7 @@ play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
 
 window.onload = function () { //Ko se stran zlouda napisemo enkrat tekst nato pa usake 3.5 sekunde
     napisi();
-    setInterval(napisi, 3500);
+    setInterval(napisi, 10000);
 };
 
 players.innerHTML = genPlayers(2); //Nastavimo rocno 2 igralca
