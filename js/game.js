@@ -98,6 +98,7 @@ async function blinkBar() { //blink za cursor
 }
 
 async function rollDice(id) {
+    dice.style.fontSize = '4vw';
     let diceNum;
     let delay = 10;
 
@@ -127,10 +128,10 @@ async function notifyAndUpdate(score){
     dice.textContent= `Score incremented by ${score}`;
     updateScoreboard();
     await sleep(1500);
-    dice.style.fontSize = '4vw';
 }
 
 async function countdown(s) {
+    dice.style.fontSize = '4vw';
     for (let i = s; i > 0; i--) {
         dice.textContent = i;
         await sleep(1000);
@@ -256,8 +257,18 @@ function genFakeTestData() { //SAMO ZA TESTIRANJE NAREDI FAKE USER DATA ZA TESTI
 
 start_btn.addEventListener('click', function(){
     start_btn.disabled = true;
-    play();
+    startGame();
 });
+
+async function startGame() { //startamo dejansko igro
+    for (let i = 0; i < round_c; i++) {
+        await play(); 
+    }
+    //TO DO:
+    //Preseli podatke na win page
+    window.location.href = "end.html";
+}
+
 
 window.onload = function () { //Ko se stran zlouda
     throw_btn.disabled = true;
