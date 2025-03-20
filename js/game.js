@@ -110,7 +110,7 @@ async function rollDice(id) { //Zavrti kocko in updejta score
         
         delay += 10; 
     }
-    score[id] = diceNum + 1;
+    score[id] += diceNum + 1;
     score_lab.textContent = (score[id]); //update score
     updateScoreboard();
 
