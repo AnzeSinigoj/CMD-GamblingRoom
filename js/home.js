@@ -241,7 +241,7 @@ async function napisi() { //funkcja ki simulira rocno tipkanje teksta
     const text = "Gambling room";
 
     blinkBar();
-    await sleep(2000);
+    await sleep(500);
     for (let i = 0; i < text.length; i++) {
         title.textContent = `> ${text.slice(0, i + 1)}`;
         await sleep(getRandomInt(100, 250));
@@ -276,9 +276,8 @@ play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
     window.location.href = "html/game.html";
 });
 
-window.onload = function () { //Ko se stran zlouda napisemo enkrat tekst nato pa usake 3.5 sekunde
+window.onload = function () { //Ko se stran zlouda 
     napisi();
-    setInterval(napisi, 10000);
 };
 
 players.innerHTML = genPlayers(2); //Nastavimo rocno 2 igralca

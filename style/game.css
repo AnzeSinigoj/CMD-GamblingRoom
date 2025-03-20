@@ -1,0 +1,250 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: black;
+}
+
+#main {
+    width: 90vw;
+    height: 85%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+}
+
+h1 {
+    font-size: 2vw;
+    color: #00FF00;
+    padding-bottom: 1.5vw;
+}
+
+p {
+    font-size: 1.5vw;
+    color: #00FF00;
+    font-weight: bold;
+}
+
+
+#title-bar {
+    font-size: 2vw;
+    font-weight: bold;
+    color: #00FF00;
+}
+
+#title-div{
+    display: flex;
+}
+
+#game {
+    width: 50%;
+    height: 95%;
+    border: 0.3vw solid #00FF00;
+    border-radius: 3vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#current-user {
+    width: 100%;
+    height: 15%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+}
+
+#current-user > div {
+    display: flex;
+    gap: 1vw;
+}
+
+#dice {
+    width: 100%;
+    height: 70%;
+    border: 0.3vw dotted #00FF00;
+    color: #00FF00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#a_dice {
+    display: inline-block;
+    white-space: pre-wrap;
+    font-size: 4vw;
+    line-height: 1.2; 
+    font-family: monospace; 
+}
+
+#controls {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    width: 15vw;
+    color: #00FF00;
+    background: black;
+    padding: 0.5vw 1vw;
+    border: 0.2vw solid #00FF00;
+    border-radius: 3vw;
+    font-size: 1.5vw;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.7;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:disabled {
+    color: red;
+    border: 0.2vw solid red;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+#data {
+    width: 25%;
+    height: 95%;
+
+    border: 0.3vw solid #00FF00;
+    border-radius: 3vw;
+}
+
+#game-data {
+    border-bottom: 0.3vw solid #00FF00;
+    width: 100%;
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#start_d {
+    padding-top: 1.5vw;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#start {
+    font-size: 1vw;
+}
+
+#user-holder{
+    height: 70%;
+}
+
+#user-data {
+    width: 100%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    gap: 1vw;
+}
+
+#user-data::-webkit-scrollbar {
+    width: 0.5vw;
+}
+
+#user-data::-webkit-scrollbar-track {
+    background-color: black; 
+    border-radius: 3vw;
+}
+
+#user-data::-webkit-scrollbar-thumb {
+    background-color: #00FF00; 
+    border-radius: 3vw; 
+}
+
+#user-data::-ms-scrollbar {
+    width: 0.5vw;
+}
+
+#user-data::-ms-scrollbar-track {
+    background-color: black;
+    border-radius: 3vw;
+}
+
+#user-data::-ms-scrollbar-thumb {
+    background-color: #00FF00;
+    border-radius: 3vw;
+}
+
+.player{
+    width: 95%;
+    height: 10%;
+    border-radius: 3vw;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.space {
+    width: 33%;
+    height: 100%;
+    text-align: center;
+}
+
+#legend {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+@media screen and (max-aspect-ratio: 3/4) {
+
+}
+
+@media screen and (max-width: 600px) {
+
+}
