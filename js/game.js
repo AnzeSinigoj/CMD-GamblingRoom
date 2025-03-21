@@ -220,14 +220,14 @@ async function loadData() { //Podatke pobrane iz session storage damo v dive in 
 
 function retrieveData() { //samo umevno poberemo podatke is session storage
     //user data
-    users = JSON.parse(sessionStorage.getItem("users")) || [];
-    gamemodes = JSON.parse(sessionStorage.getItem("gamemodes")) || [];
-    colors = JSON.parse(sessionStorage.getItem("colors")) || [];
+    users = JSON.parse(localStorage.getItem("users")) || [];
+    gamemodes = JSON.parse(localStorage.getItem("gamemodes")) || [];
+    colors = JSON.parse(localStorage.getItem("colors")) || [];
 
 
     //game data
-    round_c = sessionStorage.getItem('game_len');
-    round_len = sessionStorage.getItem('round_len');
+    round_c = localStorage.getItem('game_len');
+    round_len = localStorage.getItem('round_len');
 
 }
 
@@ -270,9 +270,9 @@ async function startGame() { //startamo dejansko igro
         await play(); 
     }
     //Shranimo podatke
-    sessionStorage.setItem("users", JSON.stringify(users));
-    sessionStorage.setItem("colors", JSON.stringify(colors));
-    sessionStorage.setItem("score", JSON.stringify(score));
+    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("colors", JSON.stringify(colors));
+    localStorage.setItem("score", JSON.stringify(score));
 
     window.location.href = "end.html";
 }

@@ -52,13 +52,13 @@ async function loadData() { //Podatke pobrane iz session storage damo v dive in 
 
 function retrieveData() { //samo umevno poberemo podatke is session storage
     //user data
-    users = JSON.parse(sessionStorage.getItem("users")) || [];
-    colors = JSON.parse(sessionStorage.getItem("colors")) || [];
-    score = JSON.parse(sessionStorage.getItem("score")) || [];
+    users = JSON.parse(localStorage.getItem("users")) || [];
+    colors = JSON.parse(localStorage.getItem("colors")) || [];
+    score = JSON.parse(localStorage.getItem("score")) || [];
 
     //game data
-    round_c = sessionStorage.getItem('game_len');
-    round_len = sessionStorage.getItem('round_len');
+    round_c = localStorage.getItem('game_len');
+    round_len = localStorage.getItem('round_len');
 }
 
 

@@ -251,14 +251,14 @@ function loadData() { //Funkcja ki zlouda podatke
 
 function retrieveData() { //samo umevno poberemo podatke is session storage
     //user data
-    player_names = JSON.parse(sessionStorage.getItem("users")) || [];
-    player_gamemodes = JSON.parse(sessionStorage.getItem("gamemodes")) || [];
-    player_colors = JSON.parse(sessionStorage.getItem("colors")) || [];
+    player_names = JSON.parse(localStorage.getItem("users")) || [];
+    player_gamemodes = JSON.parse(localStorage.getItem("gamemodes")) || [];
+    player_colors = JSON.parse(localStorage.getItem("colors")) || [];
 
 
     //game data
-    game_len = sessionStorage.getItem('game_len');
-    round_len = sessionStorage.getItem('round_len');
+    game_len = localStorage.getItem('game_len');
+    round_len = localStorage.getItem('round_len');
 
 }
 
@@ -369,23 +369,23 @@ async function blinkBar() { //blink za cursor
 
 
 play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
-    //Dodajanje v sessionStorage
-    sessionStorage.setItem("users", JSON.stringify(player_names)); //Player count ni treba podat ker users.len = p_count
-    sessionStorage.setItem("colors", JSON.stringify(player_colors));
-    sessionStorage.setItem("gamemodes", JSON.stringify(player_gamemodes));
-    sessionStorage.setItem("game_len", game_len);
-    sessionStorage.setItem("round_len", round_len);
+    //Dodajanje v localStorage
+    localStorage.setItem("users", JSON.stringify(player_names)); //Player count ni treba podat ker users.len = p_count
+    localStorage.setItem("colors", JSON.stringify(player_colors));
+    localStorage.setItem("gamemodes", JSON.stringify(player_gamemodes));
+    localStorage.setItem("game_len", game_len);
+    localStorage.setItem("round_len", round_len);
 
     //Odpremo game page z moznostjo iti nazaj
     window.location.href = "html/game.html";
 });
 
 reset.addEventListener('click', function(){
-    sessionStorage.setItem("users", JSON.stringify([]));
-    sessionStorage.setItem("colors", JSON.stringify([]));
-    sessionStorage.setItem("gamemodes", JSON.stringify([]));
-    sessionStorage.setItem("game_len", "1");
-    sessionStorage.setItem("round_len", "1");
+    localStorage.setItem("users", JSON.stringify([]));
+    localStorage.setItem("colors", JSON.stringify([]));
+    localStorage.setItem("gamemodes", JSON.stringify([]));
+    localStorage.setItem("game_len", "1");
+    localStorage.setItem("round_len", "1");
 
     players.innerHTML = genPlayers(2);
     addPlayerEv(2);
