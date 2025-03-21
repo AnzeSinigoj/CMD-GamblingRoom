@@ -121,6 +121,9 @@ async function rollDice(id) { //Zavrti kocko in updejta score
         dice.style.color = '#00FF00';
         await sleep(150);
     }
+
+    await sleep(3000);
+    await notifyAndUpdate(diceNum+1); 
 }
 
 async function notifyAndUpdate(score){ //Pokazemo userju da za koliko se je zvisal score
@@ -154,14 +157,10 @@ async function play() { //odigra eno rundo
                 if (gamemodes[i]) {
                     await countdown(3); 
                     await rollDice(i); 
-                    await sleep(3000);
-                    await notifyAndUpdate(score[i]); 
                 } else {
                     await waitForEvent(throw_btn); 
                     throw_btn.disabled = true;
                     await rollDice(i);
-                    await sleep(3000);
-                    await notifyAndUpdate(score[i]);
                 }
         }
     }
