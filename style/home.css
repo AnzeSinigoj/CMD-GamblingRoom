@@ -274,6 +274,10 @@ button:disabled {
     gap: 0.5vw;
 }
 
+#reset{
+    border-color: red;
+    color: red;
+}
 
 @media screen and (max-aspect-ratio: 3/4) {
     *{

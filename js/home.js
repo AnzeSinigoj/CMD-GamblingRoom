@@ -9,8 +9,10 @@ let p_count = document.getElementById('p_count'); //Slider za stevilo igralcev
 let p_lab = document.getElementById('p_c'); //Label za st igralcev
 let players = document.getElementById('players'); //Div za igralce -parent
 let play_b = document.getElementById('play-b'); //Gumb za igrat
+let reset = document.getElementById('reset'); //reset gumb
 let play_disabled_name = false; //true: ce je aktivna napaka pri kakem imenu 
 let play_disabled_color = false;//true: ce je aktrivna napaka pri kaki barvi
+
 //User data -> vsak igralec ima svoj id kateri je enak indeksu tabele 
 let player_names = []; //Imena igralcev
 let player_colors = []; //Barve za vsakega igralca
@@ -25,9 +27,6 @@ function genPlayers(n) { //Metoda ki generira forme za igralce
     players_c = n;
     play_disabled_name = false;
     play_disabled_color = false;
-    player_names = [];
-    player_colors = [];
-    player_gamemodes = [];
     updatePlay();
 
     for (let i = 0; i < n; i++) { //Dodamo vsakega igralca posebej v div in mu damo svoj lasten id, vsak id igralca je enak njegovemu indeksu v setu
@@ -79,10 +78,38 @@ th_sl.addEventListener('input', function () { //Updater za label od st metov na 
     }
 });
 
-p_count.addEventListener('input', function () { //Updater za label od st igralcov
+p_count.addEventListener('input', function () {
     let n = parseInt(p_count.value);
     p_lab.textContent = n + ' players';
+
+    let existingNames = [...player_names];
+    let existingColors = [...player_colors];
+    let existingGamemodes = [...player_gamemodes];
+
     players.innerHTML = genPlayers(n);
+
+    for (let i = 0; i < n; i++) {
+        if (existingNames[i]) {
+            document.getElementById('pName' + i).value = existingNames[i];
+            document.getElementById('name' + i).textContent = existingNames[i];
+        }
+
+        if (existingColors[i]) {
+            document.getElementById('color' + i).value = existingColors[i];
+            document.getElementById('name' + i).style.color = existingColors[i];
+        }
+
+        if (existingGamemodes[i] !== undefined) {
+            if (existingGamemodes[i]) {
+                document.getElementById('a_' + i).disabled = true;
+                document.getElementById('m_' + i).disabled = false;
+            } else {
+                document.getElementById('m_' + i).disabled = true;
+                document.getElementById('a_' + i).disabled = false;
+            }
+        }
+    }
+
     addPlayerEv(n);
 });
 
@@ -97,7 +124,6 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
         let auto = document.getElementById('a_' + i);
         let parent_box = name_h1.parentElement;
 
-        auto.disabled = true; //Ker je auto default in je ze zapisano v arr ze takoj selektamo
 
         name_input.addEventListener('input', function () { //Preverimo ce je ime krajse od 10 in ce ni prazno  in potem spremenimo
             if (name_input.value.length > 10) { //Ce je ime vecje od ne dovolimo vec vnosa
@@ -157,6 +183,83 @@ function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede 
         });
 
     }
+}
+
+
+function loadData() { //Funkcja ki zlouda podatke
+    if(player_names.length === 0){ //Ce nimamo podatkov jih naredimo
+        players.innerHTML = genPlayers(2);
+        addPlayerEv(2);
+        return;
+    }
+
+    //Game data
+    len_sl.value = game_len;
+    if (game_len == 1) {
+        len_lab.textContent = game_len + ' round';
+    } else {
+        len_lab.textContent = game_len + ' rounds';
+    }
+
+    th_sl.value = round_len;
+    if (round_len == 1) {
+        th_lab.textContent = round_len + ' throw';
+    } else {
+        th_lab.textContent = round_len + ' throws';
+    }
+
+    p_count.value = player_names.length;
+    p_lab.textContent = player_names.length + ' players';
+
+    //Player data
+    for (let i = 0; i < player_names.length; i++) {
+        let name = player_names[i];
+
+        players.innerHTML += `
+        <div class="addP">
+            <h1 id="name${i}">${name}</h1>
+            <p>Input user name:</p>
+            <input type="text" id="pName${i}" value="${name}">
+            <p class="err" id="name-err${i}"></p>
+            <p>Select user color:</p>
+            <input type="color" id="color${i}" value="#00FF00">
+            <p class="err" id="color-err${i}"></p>
+            <p>Select game mode:</p>
+            <div id="btn-holder"> 
+                <button id="a_${i}">Auto</button>
+                <button id="m_${i}">Manual</button>
+            </div>
+        </div>
+        `;
+
+        setTimeout(function() {
+            document.getElementById('name' + i).style.color = player_colors[i];
+            document.getElementById('color' + i).value = player_colors[i];
+    
+            if (player_gamemodes[i]) {
+                document.getElementById('a_' + i).disabled = true;
+                document.getElementById('m_' + i).disabled = false;
+            } else {
+                document.getElementById('m_' + i).disabled = true;
+                document.getElementById('a_' + i).disabled = false;
+            }
+        }, 0);
+
+    }
+    addPlayerEv(player_names.length);
+}
+
+function retrieveData() { //samo umevno poberemo podatke is session storage
+    //user data
+    player_names = JSON.parse(sessionStorage.getItem("users")) || [];
+    player_gamemodes = JSON.parse(sessionStorage.getItem("gamemodes")) || [];
+    player_colors = JSON.parse(sessionStorage.getItem("colors")) || [];
+
+
+    //game data
+    game_len = sessionStorage.getItem('game_len');
+    round_len = sessionStorage.getItem('round_len');
+
 }
 
 function nameValidation(new_name, id) { //preveri ce novo ime za userja je conflicting
@@ -264,6 +367,7 @@ async function blinkBar() { //blink za cursor
     }
 }
 
+
 play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
     //Dodajanje v sessionStorage
     sessionStorage.setItem("users", JSON.stringify(player_names)); //Player count ni treba podat ker users.len = p_count
@@ -276,10 +380,21 @@ play_b.addEventListener('click', function(){ //Funkcja za zacetek igre
     window.location.href = "html/game.html";
 });
 
+reset.addEventListener('click', function(){
+    sessionStorage.setItem("users", JSON.stringify([]));
+    sessionStorage.setItem("colors", JSON.stringify([]));
+    sessionStorage.setItem("gamemodes", JSON.stringify([]));
+    sessionStorage.setItem("game_len", "1");
+    sessionStorage.setItem("round_len", "1");
+
+    players.innerHTML = genPlayers(2);
+    addPlayerEv(2);
+});
+
 window.onload = function () { //Ko se stran zlouda 
+    retrieveData();
+    loadData();
     napisi();
 };
 
-players.innerHTML = genPlayers(2); //Nastavimo rocno 2 igralca
-addPlayerEv(2); //Jim dodamo evente
 
