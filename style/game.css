@@ -16,6 +16,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
 }
 
 html {
@@ -98,7 +99,8 @@ p {
 #dice {
     width: 100%;
     height: 70%;
-    border: 0.3vw dotted #00FF00;
+    border-top: 0.3vw dotted #00FF00;
+    border-bottom: 0.3vw dotted #00FF00;
     color: #00FF00;
     display: flex;
     align-items: center;
@@ -165,11 +167,10 @@ button:disabled {
 }
 
 #start_d {
-    padding-top: 0.6vw;
-    height: 10%;
+    height: 15%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 #user-holder{
@@ -273,21 +274,21 @@ button:disabled {
     }
 
     #dice {
-        height: 73.5%;
+        height: 75%;
+    }
+
+    #controls{
+        height: 15%;
     }
 
     #a_dice{
-        font-size: 6vh;
+        font-size: 4vh;
     }
 
     button {
         width: 15vh;
         height: 5vh;
         font-size: 3vw;
-    }
-
-    #start_d{
-        padding-top: 1.5vw;
     }
 
     #start {
@@ -297,5 +298,40 @@ button:disabled {
 
     #data {
         width: 40%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 3vh;
+    }
+
+    p {
+        font-size: 1.6vh;
+    }
+
+    #title-bar {
+        font-size: 3vh;
+    }
+
+    #current-user {
+        flex-direction: column;
+    }
+
+    #current-user p {
+        font-size: 1.4vh;
+    }
+
+    #dice {
+        border-top: 0.3vh dotted #00FF00;
+        border-bottom: 0.3vh dotted #00FF00;
+    }
+
+    #game-data {
+        height: 10%;
+    }
+
+    #user-holder {
+        height: 75%;
     }
 }

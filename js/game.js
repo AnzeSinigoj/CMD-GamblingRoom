@@ -98,7 +98,7 @@ async function blinkBar() { //blink za cursor
 }
 
 async function rollDice(id) { //Zavrti kocko in updejta score
-    dice.style.fontSize = mobileScreen ? '6vh' : '4vw';
+    dice.style.fontSize = mobileScreen ? '5vh' : '4vw';
     
     let diceNum;
     let delay = 10;
