@@ -106,44 +106,12 @@ async function blinkBar() { //blink za cursor
     }
 }
 
-function genFakeTestData() { //SAMO ZA TESTIRANJE NAREDI FAKE USER DATA ZA TESTIRAT FUNKCJONALNOST
-    round_c = 7;
-    round_len = 3;
-    users = [
-        "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah", "Ivy", "Jack", 
-        "Kenny", "Liam", "Mona", "Nina", "Oscar", "Paul", "Quinn", "Rita", "Sam", "Tom", 
-        "Uma", "Vera", "Will", "John", "Yara", "Zara"
-    ];
-
-    colors = [
-        "#FFDDC1", "#FFD700", "#90EE90", "#ADD8E6", "#FFB6C1", "#FF69B4", "#FFE4B5", "#FFFFE0", 
-        "#F0E68C", "#D3D3D3", "#F5F5F5", "#FAFAD2", "#E0FFFF", "#FFFAF0", "#FFE4E1", "#FF6347", 
-        "#98FB98", "#E6E6FA", "#B0E0E6", "#C1FFC1", "#FF98FB", "#FFF0F5", "#D8BFD8", "#F0FFF0", "#F4A300"
-    ];
-
-    gamemodes = [
-        true, false, true, true, false, true, false, true, false, true, 
-        false, true, true, false, true, false, true, false, true, false, 
-        true, false, true, false, true, false
-    ];
-
-    for (let i = 0; i < users.length; i++) {
-        score[i] = 0;
-    }
-
-    console.log("Fake data inserted!");
-}
-
 menu.addEventListener('click', function(){
     window.location.href = "../index.html";
 });
 
 window.onload = function () { //Ko se stran zlouda 
     retrieveData();
-
-    genFakeTestData(); //REMOVE
-
     loadData();
-
     napisi();
 };
