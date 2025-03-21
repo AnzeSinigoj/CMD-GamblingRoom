@@ -8,6 +8,7 @@ let score_lab = document.getElementById('cScore'); //Lable za user score v game 
 let throw_btn = document.getElementById('throw'); //Throw button
 let start_btn = document.getElementById('start'); //Start button
 let dice = document.getElementById('a_dice'); //Div kateri drzi kocko
+let mobileScreen = window.matchMedia("(max-aspect-ratio: 3/4)").matches; //Preveri ce media querry aktiviran
 
 //user data
 let users = [];
@@ -19,39 +20,38 @@ let score = [];
 let round_c = 1;
 let round_len = 1;
 
-
 const DICE_FACES = [
-`+-----------+
-|           |
-|     o     |
-|           |
-+-----------+`,
-`+-----------+
-| o         |
-|           |
-|         o |
-+-----------+`,
-`+-----------+
-| o         |
-|     o     |
-|         o |
-+-----------+`,
-`+-----------+
-| o       o |
-|           |
-| o       o |
-+-----------+`,
-`+-----------+
-| o       o |
-|     o     |
-| o       o |
-+-----------+`,
-`+-----------+
-| o       o |
-| o       o |
-| o       o |
-+-----------+`
-];
+`+-------+
+|       |
+|   o   |
+|       |
++-------+`,
+`+-------+
+| o     |
+|       |
+|     o |
++-------+`,
+`+-------+
+| o     |
+|   o   |
+|     o |
++-------+`,
+`+-------+
+| o   o |
+|       |
+| o   o |
++-------+`,
+`+-------+
+| o   o |
+|   o   |
+| o   o |
++-------+`,
+`+-------+
+| o   o |
+| o   o |
+| o   o |
++-------+`
+];    
 
 function getRandomInt(min, max) { //Vrne random int
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -98,7 +98,8 @@ async function blinkBar() { //blink za cursor
 }
 
 async function rollDice(id) { //Zavrti kocko in updejta score
-    dice.style.fontSize = '4vw';
+    dice.style.fontSize = mobileScreen ? '6vh' : '4vw';
+    
     let diceNum;
     let delay = 10;
 
@@ -130,7 +131,8 @@ async function notifyAndUpdate(score){ //Pokazemo userju da za koliko se je zvis
 }
 
 async function countdown(s) { //Preprost odstevalnik
-    dice.style.fontSize = '4vw';
+    dice.style.fontSize = mobileScreen ? '6vh' : '4vw';
+
     for (let i = s; i > 0; i--) {
         dice.textContent = i;
         await sleep(1000);
