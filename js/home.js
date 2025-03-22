@@ -387,8 +387,10 @@ reset.addEventListener('click', function(){
     localStorage.setItem("game_len", "1");
     localStorage.setItem("round_len", "1");
 
+    game_len = 1;
     len_sl.value = 1;
     len_lab.textContent = '1 round';
+    round_len = 1;
     th_sl.value = 1;
     th_lab.textContent = '1 throw';
     th_sl.value = 2;
