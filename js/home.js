@@ -387,6 +387,13 @@ reset.addEventListener('click', function(){
     localStorage.setItem("game_len", "1");
     localStorage.setItem("round_len", "1");
 
+    len_sl.value = 1;
+    len_lab.textContent = '1 round';
+    th_sl.value = 1;
+    th_lab.textContent = '1 throw';
+    th_sl.value = 2;
+    p_lab.textContent = '2 players';
+
     players.innerHTML = genPlayers(2);
     addPlayerEv(2);
 });
