@@ -2,6 +2,8 @@
 
 <mark>**WORK IN PROGRESS!**</mark>
 
+<mark>**GAME IS PLAYABLE, JUST MISSING SOME FEATURES**</mark>
+
 This is a school project where we have to create a gambling game featuring dice and multiplayer options.
 
 The project is usually done in PHP, but I wrote it in JavaScript since it's just a game and doesn't require backend security.
