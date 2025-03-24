@@ -78,41 +78,48 @@ th_sl.addEventListener('input', function () { //Updater za label od st metov na 
     }
 });
 
-p_count.addEventListener('input', function () {
-    let n = parseInt(p_count.value);
-    p_lab.textContent = n + ' players';
+p_count.addEventListener('input', function () { //event listener za players
+    let desiredCount = parseInt(p_count.value);
+    p_lab.textContent = desiredCount + ' players';
 
-    let existingNames = [...player_names];
-    let existingColors = [...player_colors];
-    let existingGamemodes = [...player_gamemodes];
+    let currentCount = players.children.length;
 
-    players.innerHTML = genPlayers(n);
-
-    for (let i = 0; i < n; i++) {
-        if (existingNames[i]) {
-            document.getElementById('pName' + i).value = existingNames[i];
-            document.getElementById('name' + i).textContent = existingNames[i];
-        }
-
-        if (existingColors[i]) {
-            document.getElementById('color' + i).value = existingColors[i];
-            document.getElementById('name' + i).style.color = existingColors[i];
-        }
-
-        if (existingGamemodes[i] !== undefined) {
-            if (existingGamemodes[i]) {
-                document.getElementById('a_' + i).disabled = true;
-                document.getElementById('m_' + i).disabled = false;
-            } else {
-                document.getElementById('m_' + i).disabled = true;
-                document.getElementById('a_' + i).disabled = false;
-            }
+    if (desiredCount < currentCount) {
+        for (let i = currentCount - 1; i >= desiredCount; i--) {
+            players.removeChild(players.lastChild);
+            player_names.pop();
+            player_colors.pop();
+            player_gamemodes.pop();
         }
     }
 
-    addPlayerEv(n);
-});
+    else if (desiredCount > currentCount) {
+        for (let i = currentCount; i < desiredCount; i++) {
+            player_names.push(`Player ${i + 1}`);
+            player_colors.push('#00FF00');
+            player_gamemodes.push(true);
 
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('addP');
+            newDiv.innerHTML = `
+                <h1 id="name${i}">${player_names[i]}</h1>
+                <p>Input user name:</p>
+                <input type="text" id="pName${i}" value="${player_names[i]}">
+                <p class="err" id="name-err${i}"></p>
+                <p>Select user color:</p>
+                <input type="color" id="color${i}" value="#00FF00">
+                <p class="err" id="color-err${i}"></p>
+                <p>Select game mode:</p>
+                <div id="btn-holder"> 
+                    <button id="a_${i}">Auto</button>
+                    <button id="m_${i}">Manual</button>
+                </div>
+            `;
+            players.appendChild(newDiv);
+            addEventListenersForPlayer(i);
+        }
+    }
+});
 
 function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede na svoj id
     for (let i = 0; i < n; i++) {
@@ -393,7 +400,7 @@ reset.addEventListener('click', function(){
     round_len = 1;
     th_sl.value = 1;
     th_lab.textContent = '1 throw';
-    th_sl.value = 2;
+    p_count.value = 2;
     p_lab.textContent = '2 players';
 
     players.innerHTML = genPlayers(2);
