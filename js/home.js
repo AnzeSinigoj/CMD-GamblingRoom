@@ -10,8 +10,14 @@ let p_lab = document.getElementById('p_c'); //Label za st igralcev
 let players = document.getElementById('players'); //Div za igralce -parent
 let play_b = document.getElementById('play-b'); //Gumb za igrat
 let reset = document.getElementById('reset'); //reset gumb
+let info = document.getElementById('info'); //info gumb
+let info_det = document.getElementById('info-detailed'); //info opis
+let cover = document.getElementById('cover'); //Dim overlay
+let close = document.getElementById('exit'); //info exit
+
 let play_disabled_name = false; //true: ce je aktivna napaka pri kakem imenu 
 let play_disabled_color = false;//true: ce je aktrivna napaka pri kaki barvi
+let mobileScreen = window.matchMedia("(max-aspect-ratio: 3/4)").matches; //Preveri ce media querry aktiviran
 
 //User data -> vsak igralec ima svoj id kateri je enak indeksu tabele 
 let player_names = []; //Imena igralcev
@@ -82,7 +88,7 @@ p_count.addEventListener('input', function () { //event listener za players
     let desiredCount = parseInt(p_count.value);
     p_lab.textContent = desiredCount + ' players';
 
-    if(desiredCount == 2){
+    if(desiredCount == 2 && !mobileScreen){
         players.style.justifyContent = "center";
     }else {
         players.style.justifyContent = "start";
@@ -122,7 +128,7 @@ p_count.addEventListener('input', function () { //event listener za players
                 </div>
             `;
             players.appendChild(newDiv);
-            addEventListenersForPlayer(i);
+            addPlayerEv(i);
         }
     }
 });
@@ -411,6 +417,28 @@ reset.addEventListener('click', function(){
 
     players.innerHTML = genPlayers(2);
     addPlayerEv(2);
+});
+
+info.addEventListener('click', function() {
+    if (info_det.classList.contains('hide')) {
+        cover.classList.remove('fade-out');
+        cover.classList.add('fade-in');
+
+        info_det.classList.remove('hide');
+        info_det.classList.add('show');
+    } else {
+        cover.classList.remove('fade-in');
+        cover.classList.add('fade-out');
+        info_det.classList.remove('show');
+        info_det.classList.add('hide');
+    }
+});
+
+close.addEventListener('click', function() {
+    cover.classList.remove('fade-in');
+    cover.classList.add('fade-out');
+    info_det.classList.remove('show');
+    info_det.classList.add('hide');
 });
 
 window.onload = function () { //Ko se stran zlouda 
