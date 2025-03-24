@@ -125,7 +125,7 @@ button {
     height: 75%;
     color: #00FF00;
     background: black;
-    border: 0.2vw solid #00FF00;
+    border: 0.2vw dotted #00FF00;
     border-radius: 3vw;
     font-size: 1.3vw;
     font-weight: bold;

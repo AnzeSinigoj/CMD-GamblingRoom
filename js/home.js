@@ -82,6 +82,12 @@ p_count.addEventListener('input', function () { //event listener za players
     let desiredCount = parseInt(p_count.value);
     p_lab.textContent = desiredCount + ' players';
 
+    if(desiredCount == 2){
+        players.style.justifyContent = "center";
+    }else {
+        players.style.justifyContent = "start";
+    }
+
     let currentCount = players.children.length;
 
     if (desiredCount < currentCount) {
