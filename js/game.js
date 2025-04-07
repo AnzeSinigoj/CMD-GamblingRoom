@@ -123,14 +123,14 @@ async function rollDice(id) { //Zavrti kocko in updejta score
         await sleep(150);
     }
 
-    await sleep(3000);
+    await sleep(1300);
     await notifyAndUpdate(diceNum+1); 
 }
 
 async function notifyAndUpdate(score){ //Pokazemo userju da za koliko se je zvisal score
     dice.style.fontSize = '3.5vw';
     dice.textContent= `Score incremented by ${score}`;
-    await sleep(1500);
+    await sleep(500);
 }
 
 async function countdown(s) { //Preprost odstevalnik

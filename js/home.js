@@ -94,44 +94,152 @@ p_count.addEventListener('input', function () { //event listener za players
         players.style.justifyContent = "start";
     }
 
-    let currentCount = players.children.length;
+    let currentCount = player_names.length;
 
     if (desiredCount < currentCount) {
-        for (let i = currentCount - 1; i >= desiredCount; i--) {
-            players.removeChild(players.lastChild);
-            player_names.pop();
-            player_colors.pop();
-            player_gamemodes.pop();
+        player_names.splice(desiredCount);
+        player_colors.splice(desiredCount);
+        player_gamemodes.splice(desiredCount);
+
+        // Rebuild DOM completely
+        players.innerHTML = '';
+        for (let i = 0; i < desiredCount; i++) {
+            const name = player_names[i] || `Player ${i + 1}`;
+            const id = i;
+            const color = player_colors[i] || '#00FF00';
+            const isAuto = player_gamemodes[i] !== false;
+
+            players.innerHTML += `
+                <div class="addP">
+                    <h1 id="name${id}">${name}</h1>
+                    <p>Input user name:</p>
+                    <input type="text" id="pName${id}" value="${name}">
+                    <p class="err" id="name-err${id}"></p>
+                    <p>Select user color:</p>
+                    <input type="color" id="color${id}" value="${color}">
+                    <p class="err" id="color-err${id}"></p>
+                    <p>Select game mode:</p>
+                    <div id="btn-holder"> 
+                        <button id="a_${id}">Auto</button>
+                        <button id="m_${id}">Manual</button>
+                    </div>
+                </div>
+            `;
+
+            // Ensure values exist if we were rebuilding
+            player_names[i] = name;
+            player_colors[i] = color;
+            player_gamemodes[i] = isAuto;
+
+            setTimeout(() => {
+                document.getElementById('color' + id).value = color;
+                if (isAuto) {
+                    document.getElementById('a_' + id).disabled = true;
+                } else {
+                    document.getElementById('m_' + id).disabled = true;
+                }
+            }, 0);
+            addSinglePlayerEv(id);
         }
     }
 
     else if (desiredCount > currentCount) {
         for (let i = currentCount; i < desiredCount; i++) {
-            player_names.push(`Player ${i + 1}`);
+            const name = `Player ${i + 1}`;
+            const id = i;
+            player_names.push(name);
             player_colors.push('#00FF00');
-            player_gamemodes.push(true);
+            player_gamemodes.push(true); 
 
-            let newDiv = document.createElement('div');
-            newDiv.classList.add('addP');
-            newDiv.innerHTML = `
-                <h1 id="name${i}">${player_names[i]}</h1>
+            const p_div = `
+            <div class="addP">
+                <h1 id="name${id}">${name}</h1>
                 <p>Input user name:</p>
-                <input type="text" id="pName${i}" value="${player_names[i]}">
-                <p class="err" id="name-err${i}"></p>
+                <input type="text" id="pName${id}" value="${name}">
+                <p class="err" id="name-err${id}"></p>
                 <p>Select user color:</p>
-                <input type="color" id="color${i}" value="#00FF00">
-                <p class="err" id="color-err${i}"></p>
+                <input type="color" id="color${id}" value="#00FF00">
+                <p class="err" id="color-err${id}"></p>
                 <p>Select game mode:</p>
                 <div id="btn-holder"> 
-                    <button id="a_${i}">Auto</button>
-                    <button id="m_${i}">Manual</button>
+                    <button id="a_${id}">Auto</button>
+                    <button id="m_${id}">Manual</button>
                 </div>
+            </div>
             `;
-            players.appendChild(newDiv);
-            addPlayerEv(i);
+
+            players.innerHTML += p_div;
+            addSinglePlayerEv(i);
         }
     }
 });
+
+function addSinglePlayerEv(i) {
+    let name_h1 = document.getElementById('name' + i);
+    let name_input = document.getElementById('pName' + i);
+    let name_e = document.getElementById('name-err' + i);
+    let color_c = document.getElementById('color' + i);
+    let manual = document.getElementById('m_' + i);
+    let auto = document.getElementById('a_' + i);
+    let parent_box = name_h1.parentElement;
+
+    name_input.addEventListener('input', function () {
+        if (name_input.value.length > 10) {
+            name_input.value = name_input.value.slice(0, 10);
+        } else if (name_input.value.length === 0) {
+            play_disabled_name = true;
+            name_h1.textContent = `ERROR`;
+            name_h1.classList.add('errH1');
+            parent_box.classList.add('pErr');
+
+            name_e.style.display = 'block';
+            name_e.textContent = 'Username cannot be empty!';
+            updatePlay();
+        } else {
+            play_disabled_name = false;
+            name_h1.classList.remove('errH1');
+            parent_box.classList.remove('pErr');
+
+            name_e.style.display = 'none';
+            name_e.textContent = '';
+            updatePlay();
+        }
+
+        if (name_input.value.length > 0) {
+            if (nameValidation(name_input.value, i)) {
+                player_names[i] = name_input.value;
+                name_h1.textContent = name_input.value;
+            } else {
+                play_disabled_name = true;
+                name_h1.textContent = `ERROR`;
+                name_h1.classList.add('errH1');
+                parent_box.classList.add('pErr');
+
+                name_e.textContent = 'Cannot use the same name as another user!';
+                name_e.style.display = 'block';
+                updatePlay();
+            }
+        }
+        updateColor(i);
+    });
+
+    color_c.addEventListener('input', function () {
+        updateColor(i);
+    });
+
+    manual.addEventListener('click', function () {
+        player_gamemodes[i] = false;
+        manual.disabled = true;
+        auto.disabled = false;
+    });
+
+    auto.addEventListener('click', function () {
+        player_gamemodes[i] = true;
+        manual.disabled = false;
+        auto.disabled = true;
+    });
+}
+
 
 function addPlayerEv(n) { //Metoda ki doda event listener vsakemu igralcu glede na svoj id
     for (let i = 0; i < n; i++) {
@@ -230,6 +338,7 @@ function loadData() { //Funkcja ki zlouda podatke
     p_count.value = player_names.length;
     p_lab.textContent = player_names.length + ' players';
 
+    players.innerHTML = ''; 
     //Player data
     for (let i = 0; i < player_names.length; i++) {
         let name = player_names[i];
@@ -269,16 +378,26 @@ function loadData() { //Funkcja ki zlouda podatke
 }
 
 function retrieveData() { //samo umevno poberemo podatke is session storage
-    //user data
-    player_names = JSON.parse(localStorage.getItem("users")) || [];
-    player_gamemodes = JSON.parse(localStorage.getItem("gamemodes")) || [];
-    player_colors = JSON.parse(localStorage.getItem("colors")) || [];
+    try { 
+        //user data
+        player_names = JSON.parse(localStorage.getItem("users")) || [];
+        player_gamemodes = JSON.parse(localStorage.getItem("gamemodes")) || [];
+        player_colors = JSON.parse(localStorage.getItem("colors")) || [];
 
+        if (
+            player_names.length !== player_colors.length ||
+            player_names.length !== player_gamemodes.length
+        ) {
+            throw new Error("Mismatched player data");
+        }
 
-    //game data
-    game_len = localStorage.getItem('game_len');
-    round_len = localStorage.getItem('round_len');
-
+        //game data
+        game_len = parseInt(localStorage.getItem('game_len')) || 1;
+        round_len = parseInt(localStorage.getItem('round_len')) || 1;
+    } catch (e) {
+        localStorage.clear();
+        console.warn("LocalStorage reset due to error:", e.message);
+    }
 }
 
 function nameValidation(new_name, id) { //preveri ce novo ime za userja je conflicting
