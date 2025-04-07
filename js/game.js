@@ -8,6 +8,7 @@ let score_lab = document.getElementById('cScore'); //Lable za user score v game 
 let throw_btn = document.getElementById('throw'); //Throw button
 let start_btn = document.getElementById('start'); //Start button
 let dice = document.getElementById('a_dice'); //Div kateri drzi kocko
+let order = []; //Shrani originalni playorder
 let mobileScreen = window.matchMedia("(max-aspect-ratio: 3/4)").matches; //Preveri ce media querry aktiviran
 
 //user data
@@ -142,28 +143,31 @@ async function countdown(s) { //Preprost odstevalnik
     }
 }
 
-async function play() { //odigra eno rundo 
-        for (let i = 0; i < users.length; i++) {
-            for (let r = 1; r <= round_len; r++) {
-                round_len_lab.textContent = `Throw: ${r}/${round_len}`; //updejatmo counter
-         
-                dice.textContent = '';
-                user_lab.textContent = users[i];
-                user_lab.style.setProperty('color', colors[i], 'important');
+async function play() { //odigra eno rundo
+    for (let r = 1; r <= round_len; r++) {
+        for (let i = 0; i < order.length; i++) {
+            round_len_lab.textContent = `Throw: ${r}/${round_len}`;
+            dice.textContent = '';
 
-                score_lab.textContent = score[i];
-                score_lab.style.setProperty('color', colors[i], 'important');
+            const playerName = order[i];
+            const actualIndex = users.indexOf(playerName);
 
-                throw_btn.disabled = gamemodes[i];
+            user_lab.textContent = playerName;
+            user_lab.style.setProperty('color', colors[actualIndex], 'important');
 
-                if (gamemodes[i]) {
-                    await countdown(3); 
-                    await rollDice(i); 
-                } else {
-                    await waitForEvent(throw_btn); 
-                    throw_btn.disabled = true;
-                    await rollDice(i);
-                }
+            score_lab.textContent = score[actualIndex];
+            score_lab.style.setProperty('color', colors[actualIndex], 'important');
+
+            throw_btn.disabled = gamemodes[actualIndex];
+
+            if (gamemodes[actualIndex]) {
+                await countdown(3);
+                await rollDice(actualIndex);
+            } else {
+                await waitForEvent(throw_btn);
+                throw_btn.disabled = true;
+                await rollDice(actualIndex);
+            }
         }
     }
 }
@@ -177,10 +181,61 @@ function waitForEvent(element) { //Funkcja ki pocaka do konca necesa
     });
 }
 
-function updateScoreboard() { //Posodibimo scoreboard !POTREBNO BO SORTIRAT IN SPREMINJAT INDEKSE VSEM TABELAM!
+async function updateScoreboard() { //Posodibimo scoreboard !POTREBNO BO SORTIRAT IN SPREMINJAT INDEKSE VSEM TABELAM!
+    await sortPlayersByScore();
     for (let i = 0; i < users.length; i++) {
         let score_lab = document.getElementById('score'+i);
         score_lab.textContent = score[i];
+    }
+}
+
+async function sortPlayersByScore() { //ChatGPT je to skuhal nazalost sem prepozno zvedu da lahko delas "objekte" v JS :(
+    let combined = [];
+
+    // Combine data into an array of objects
+    for (let i = 0; i < users.length; i++) {
+        combined.push({
+            user: users[i],
+            color: colors[i],
+            gamemode: gamemodes[i],
+            score: score[i]
+        });
+    }
+
+    // Sort by score descending
+    combined.sort((a, b) => b.score - a.score);
+
+    // Unpack the sorted data back into the original arrays
+    for (let i = 0; i < combined.length; i++) {
+        users[i] = combined[i].user;
+        colors[i] = combined[i].color;
+        gamemodes[i] = combined[i].gamemode;
+        score[i] = combined[i].score;
+    }
+
+    // Re-render the scoreboard so that the displayed order is updated
+    renderScoreboard();
+}
+
+function renderScoreboard() { 
+    player_div.innerHTML = '';
+    for (let i = 0; i < users.length; i++) {
+        let cMode = gamemodes[i] ? "A" : "M";
+        let cUser = users[i];
+        let cColor = colors[i];
+
+        player_div.innerHTML += 
+            `<div class="player">
+                <div class="space">
+                    <p id="mode${i}" style="color: ${cColor};">${cMode}</p>
+                </div>
+                <div class="space">
+                    <p id="name${i}" style="color: ${cColor};">${cUser}</p>
+                </div>
+                <div class="space">
+                    <p id="score${i}" style="color: ${cColor};">${score[i]}</p>
+                </div>
+            </div>`;
     }
 }
 
@@ -229,6 +284,7 @@ function retrieveData() { //samo umevno poberemo podatke is session storage
     round_c = localStorage.getItem('game_len');
     round_len = localStorage.getItem('round_len');
 
+    order = [...users];
 }
 
 function genFakeTestData() { //SAMO ZA TESTIRANJE NAREDI FAKE USER DATA ZA TESTIRAT FUNKCJONALNOST
