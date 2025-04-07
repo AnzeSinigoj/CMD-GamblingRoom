@@ -374,8 +374,8 @@ button:disabled {
     position: absolute;
     height: 1.5vw !important;
     width: 1.5vw !important;
-    top: 0.5vw;
-    right: 1vw;
+    top: 0.7vw;
+    right: 1.5vw;
     border: 0.3vw solid #00FF00;
     border-radius: 50vw;
     font-size: 1vw;
@@ -512,6 +512,7 @@ button:disabled {
     }
 
     #exit{
+        top: 1vw;
         font-size: 1.5vh;
         width: 2.5vh !important;
         height: 2.5vh !important;
@@ -561,6 +562,7 @@ button:disabled {
         border-width: 0.3vh;
         width: 70vw;
         height: 15vh;
+        gap: 2vw;
     }
 
     #info-detailed div {
@@ -571,10 +573,12 @@ button:disabled {
     }
 
     #exit {
-        right: 1vw;
+        right: 1vh;
+        top: 1vh;
         width: 3vh !important;
         height: 3vh !important;
+        padding: 1vw;
         font-size: 2vh;
-        border-width: 0.3vh ;
+        border-width: 0.3vh;
     }
 }

@@ -277,8 +277,8 @@ p {
     position: absolute;
     height: 2.5vw !important;
     width: 2.5vw !important;
-    top: 0.5vw;
-    right: 1vw;
+    top: 0.7vw;
+    right: 1.5vw;
     border: 0.3vw solid #00FF00;
     border-radius: 50vw;
     font-size: 1.5vw;
@@ -328,6 +328,7 @@ p {
     }
 
     #exit{
+        top: 1vw;
         font-size: 1.5vh;
         width: 3vw !important;
         height: 3vw !important;
@@ -351,6 +352,7 @@ p {
         border-width: 0.3vh;
         width: 80vw;
         height: 20vh;
+        gap: 2vw;
     }
 
     #info-detailed div {
@@ -362,10 +364,12 @@ p {
     }
 
     #exit {
-        width: 4vh !important;
-        height: 4vh !important;
-        font-size: 3vh;
+        right: 1vh;
+        top: 1vh;
+        width: 3vh !important;
+        height: 3vh !important;
+        padding: 1vw;
+        font-size: 2vh;
         border-width: 0.3vh;
-
     }
 }
