@@ -358,7 +358,7 @@ button:disabled {
 
 #info-detailed div {
     width: 100%;
-    max-height: 3vw;
+    max-height: fit-content;
     text-align: left;
 }
 
