@@ -561,7 +561,7 @@ button:disabled {
     #info-detailed {
         border-width: 0.3vh;
         width: 70vw;
-        height: 15vh;
+        max-height: fit-content;
         gap: 2vw;
     }
 
